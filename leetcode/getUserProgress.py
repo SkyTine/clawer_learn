@@ -10,7 +10,7 @@ headers = {
 }
 
 
-def get_user_data(userSlugs):
+def get_user_data(userSlugs: list):
     """
     爬取所有user的力扣刷题进度~
     :param userSlugs: 用户id
@@ -34,15 +34,17 @@ def get_user_data(userSlugs):
         if response.status_code != 200 or data == []:
             print("\033[1;30;41mERROR:   用户：", user, "信息获取失败！请检查用户id是否正确！ \033[0m")
             continue
+        total = data[0]["count"] + data[1]["count"] + data[2]["count"]
         print("用户：", user, ":")
-        print("简单题：", data[0]["count"])
-        print("中等题：", data[1]["count"])
-        print("困难题：", data[2]["count"])
-        user_data = {user: {
+        print("简单题：", data[0]["count"], "中等题：", data[1]["count"], "困难题：", data[2]["count"])
+        print("\033[1;32m总题数：", total, "\033[0m")
+        user_data = {
+            'user': user,
             'easy': data[0]["count"],
             'medium': data[1]["count"],
             'hard': data[2]["count"],
-        }}
+            'total': total
+        }
         user_progress.append(user_data)
     print(json.dumps(user_progress))
     fp = open('userProgress.json', 'w', encoding='utf-8')
@@ -52,5 +54,5 @@ def get_user_data(userSlugs):
 
 if __name__ == '__main__':
     # eg:
-    userSlugs = ["continue-xyx", "ki-kyo", "fornary4", "Ylaro"]
+    userSlugs = ["continue-xyx", "ki-kyo", "fornary4", "Ylarod"]
     get_user_data(userSlugs=userSlugs)
