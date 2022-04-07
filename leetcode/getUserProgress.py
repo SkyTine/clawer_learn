@@ -29,7 +29,11 @@ def get_user_data(userSlugs: list):
     for user in userSlugs:
         time.sleep(0.1)
         params["variables"]["userSlug"] = user
-        response = requests.post(url=url, data=json.dumps(params), headers=headers)
+        try:
+            response = requests.post(url=url, data=json.dumps(params), headers=headers)
+        except:
+            print("爬取出错！请检查网络和请求参数等...")
+            break
         data = response.json()["data"]["userProfileUserQuestionProgress"]["numAcceptedQuestions"]
         if response.status_code != 200 or data == []:
             print("\033[1;30;41mERROR:   用户：", user, "信息获取失败！请检查用户id是否正确！ \033[0m")
